@@ -1,5 +1,7 @@
 package Observer;
 
+import java.sql.SQLException;
+
 public interface Observer {
-    void notifyObservers();
+    void handleEvent() throws SQLException;
 }

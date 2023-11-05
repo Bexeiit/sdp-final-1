@@ -40,13 +40,13 @@ public class LogIn {
         boolean isEmailExists = true;
         while (isEmailExists) {
             try {
-                Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Flight-Registration-System", "postgres", "1");
+                Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "aa");
                 String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, email);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
-                if (((ResultSet) resultSet).next()) {
+                if (resultSet.next()) {
                     int count = resultSet.getInt(1);
                     if (count > 0) {
                         isEmailExists = false;
@@ -69,19 +69,17 @@ public class LogIn {
         boolean isPasswordExists = true;
         while (isPasswordExists) {
             try {
-                Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Flight-Registration-System", "postgres", "1");
+                Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "aa");
                 String sql = "SELECT COUNT(*) FROM users WHERE password = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, password);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
-                if (((ResultSet) resultSet).next()) {
+                if (resultSet.next()) {
                     int count = resultSet.getInt(1);
                     if (count > 0) {
                         isPasswordExists = false;
                         System.out.println("\n You've successfully logged in.");
-                        Admin admin = new Admin();
-
                     }
                     else {
                         System.out.println("Invalid Password. Try again.");
@@ -150,15 +148,11 @@ public class LogIn {
                 preparedStatement.setString(1, password);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
-                if (((ResultSet) resultSet).next()) {
+                if (resultSet.next()) {
                     int count = resultSet.getInt(1);
                     if (count > 0) {
                         isPasswordExists = false;
                         System.out.println("\n You've successfully logged in.");
-                        System.out.println("""
-                                1. Create a flight
-                                2. Close""");
-
 
                         boolean stillCreate = true;
                         while (stillCreate) {
@@ -167,7 +161,9 @@ public class LogIn {
                                 2. Close""");
                             int adminChoose = cin.nextInt();
                             if (adminChoose == 1) {
-                                new Admin().createFlight();
+                                Admin admin = new Admin();
+                                admin.createFlight();
+                                admin.handleEvent();
                             }
                             else {
                                 stillCreate = false;

@@ -176,7 +176,9 @@ public class SignUp {
                                 2. Close""");
                     int adminChoose = cin.nextInt();
                     if (adminChoose == 1) {
-                        new Admin().createFlight();
+                        Admin admin = new Admin();
+                        admin.createFlight();
+                        admin.handleEvent();
                     }
                     else {
                         stillCreate = false;

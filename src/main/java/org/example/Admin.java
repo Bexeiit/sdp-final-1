@@ -1,9 +1,14 @@
 package org.example;
 
+import Observer.Observer;
+
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
-public class Admin {
+public class Admin implements Observer {
+    private int idDB = 0;
+    // nextval('flights_id_seq'::regclass)
     public void createFlight() throws SQLException {
         Scanner scanner = new Scanner(System.in);
 
@@ -13,6 +18,7 @@ public class Admin {
         String from_city = scanner.next();
         System.out.println("Enter destination city: ");
         String to_city = scanner.next();
+//        LocalDateTime localDateTime = LocalDateTime.of(2023,11,10,17,10);
         System.out.println("Enter departure date: ");
         String departure_date = scanner.next();
         System.out.println("Enter departure time: ");
@@ -36,13 +42,50 @@ public class Admin {
             int rowsInserted = preparedStatement.executeUpdate(); // = 1
 
             if (rowsInserted > 0) {
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT currval('flights_id_seq'::regclass)");
+                if (rs.next()) {
+                    idDB = rs.getInt(1);
+                }
+
                 System.out.println("A new flight has been created successfully.");
             }
-
             connection.close();
         } catch (SQLException e) {
-            // Handle the exception
-            e.printStackTrace(); // You can replace this with appropriate error handling
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void handleEvent() throws SQLException {
+        System.out.println("Dear consumers, we have some new flights");
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "aa");
+            String sql = "SELECT * FROM flights WHERE id = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, idDB);
+
+            resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                System.out.println("Flight number -> " + resultSet.getString("flight_number") + "\n" +
+                        "The flight from " + resultSet.getString("from_city") + " in " + resultSet.getString("departure_date") + " at " + resultSet.getString("departure_time") + "\n" +
+                        "To " + resultSet.getString("to_city") + " in " + resultSet.getString("arrival_date") + " at " + resultSet.getString("arrival_time") );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (ps != null) ps.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

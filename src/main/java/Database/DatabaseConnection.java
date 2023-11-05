@@ -1,17 +1,19 @@
 package Database;
 
+import org.example.Admin;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DatabaseConnection {
+public class DatabaseConnection  {
+    public static final String jdbcURL = "jdbc:postgresql://localhost:5432/postgres";
+    public static final String username = "postgres";
+    public static final String password = "aa";
 
     public static void main(String[] args) {
-        String jdbcURL = "jdbc:postgresql://localhost:5432/postgres";
-        String username = "postgres";
-        String password = "aa";
 
         try {
             Connection connection = DriverManager.getConnection(jdbcURL, username, password);
@@ -34,6 +36,5 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 }
