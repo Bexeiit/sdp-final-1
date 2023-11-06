@@ -52,7 +52,7 @@ public class LogIn {
                         isEmailExists = false;
                     }
                     else {
-                        System.out.println("Invalid E-Mail or yr not registered yet. Try again.");
+                        System.err.println("Invalid E-Mail or yr not registered yet. Try again.");
                         email = cin.next();
                     }
                 }
@@ -82,7 +82,7 @@ public class LogIn {
                         System.out.println("\n You've successfully logged in.");
                     }
                     else {
-                        System.out.println("Invalid Password. Try again.");
+                        System.err.println("Invalid Password. Try again.");
                         password = cin.next();
                     }
                 }
@@ -120,7 +120,7 @@ public class LogIn {
                             if (countRole > 0) {
                                 isEmailExists = false;
                             } else {
-                                System.out.println("Invalid E-Mail or you are not an Admin. Try again.");
+                                System.err.println("Invalid E-Mail or you are not an Admin. Try again.");
                                 email = cin.next();
                             }
                         }
@@ -171,7 +171,7 @@ public class LogIn {
                         }
                     }
                     else {
-                        System.out.println("Invalid Password. Try again.");
+                        System.err.println("Invalid Password. Try again.");
                         password = cin.next();
                     }
                 }

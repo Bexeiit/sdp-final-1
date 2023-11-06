@@ -27,9 +27,9 @@ public class Main {
                     LogIn logIn = new LogIn();
                     logIn.logInAs();
                 case 0:
-                    System.exit(0);
+                    break;
                 default:
-                    System.out.println("Wrong option. Enter in exist one");
+                    System.err.println("Wrong option. Enter in exist one");
             }
         }
     }

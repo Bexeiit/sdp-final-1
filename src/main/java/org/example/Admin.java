@@ -3,14 +3,16 @@ package org.example;
 import Observer.Observer;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class Admin implements Observer {
+    static Scanner scanner = new Scanner(System.in);
+
     private int idDB = 0;
     // nextval('flights_id_seq'::regclass)
     public void createFlight() throws SQLException {
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter flight number: ");
         String flight_number = scanner.next();
@@ -18,15 +20,16 @@ public class Admin implements Observer {
         String from_city = scanner.next();
         System.out.println("Enter destination city: ");
         String to_city = scanner.next();
-//        LocalDateTime localDateTime = LocalDateTime.of(2023,11,10,17,10);
         System.out.println("Enter departure date: ");
         String departure_date = scanner.next();
-        System.out.println("Enter departure time: ");
+        System.out.println("Enter departure time:");
         String departure_time = scanner.next();
+        LocalDateTime depLDT = inputDateAndTime(departure_date, departure_time);
         System.out.println("Enter arrival date: ");
         String arrival_date = scanner.next();
         System.out.println("Enter arrival time: ");
         String arrival_time = scanner.next();
+        LocalDateTime arriveLDT = inputDateAndTime(arrival_date, arrival_time);
 
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "aa");
@@ -35,10 +38,10 @@ public class Admin implements Observer {
             preparedStatement.setString(1, flight_number);
             preparedStatement.setString(2, from_city);
             preparedStatement.setString(3, to_city);
-            preparedStatement.setString(4, departure_date);
-            preparedStatement.setString(5, departure_time);
-            preparedStatement.setString(6, arrival_date);
-            preparedStatement.setString(7, arrival_time);
+            preparedStatement.setDate(4, Date.valueOf(depLDT.toLocalDate()));
+            preparedStatement.setTime(5, Time.valueOf(depLDT.toLocalTime()));
+            preparedStatement.setDate(6, Date.valueOf(arriveLDT.toLocalDate()));
+            preparedStatement.setTime(7, Time.valueOf(arriveLDT.toLocalTime()));
             int rowsInserted = preparedStatement.executeUpdate(); // = 1
 
             if (rowsInserted > 0) {
@@ -87,6 +90,20 @@ public class Admin implements Observer {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static LocalDateTime inputDateAndTime(String fullDate, String fullTime){
+        String[] dates = fullDate.split("-");
+        Integer day = Integer.parseInt(dates[0]);
+        Integer month = Integer.parseInt(dates[1]);
+        Integer year = Integer.parseInt(dates[2]);
+
+        String[] times = fullTime.split(":");
+        Integer hour = Integer.parseInt(times[0]);
+        Integer minute = Integer.parseInt(times[1]);
+
+        return LocalDateTime.of(year, month, day, hour, minute);
+
     }
 
 }

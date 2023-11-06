@@ -48,7 +48,7 @@ public class SignUp {
         System.out.println("Enter Your E-Mail");
         String email = cin.next();
         while (!isValidEmail(email)){
-            System.out.printf("Error: Invalid email address");
+            System.err.printf("Error: Invalid email address");
             System.out.println();
             System.out.println("Enter Your E-Mail");
             email = cin.next();
@@ -66,7 +66,7 @@ public class SignUp {
                 if (((ResultSet) resultSet).next()) {
                     int count = resultSet.getInt(1);
                     if (count > 0) {
-                        System.out.println("Given E-Mail is already exists. Please enter other E-Mail.");
+                        System.err.println("Given E-Mail is already exists. Please enter other E-Mail.");
                         email = cin.next();
                     }
                     else {
@@ -97,7 +97,7 @@ public class SignUp {
             if (rowsAffected > 0) {
                 System.out.println("User registration successful.");
             } else {
-                System.out.println("User registration failed.");
+                System.err.println("User registration failed.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -114,7 +114,7 @@ public class SignUp {
             System.out.println("Enter Your E-Mail");
             String email = cin.next();
             while (!isValidEmail(email)){
-                System.out.printf("Error: Invalid email address");
+                System.err.printf("Error: Invalid email address");
                 System.out.println();
                 System.out.println("Enter Your E-Mail");
                 email = cin.next();
@@ -133,7 +133,7 @@ public class SignUp {
                 if (((ResultSet) resultSet).next()) {
                     int count = resultSet.getInt(1);
                     if (count > 0) {
-                        System.out.println("Given E-Mail is already exists. Please enter other E-Mail.");
+                        System.err.println("Given E-Mail is already exists. Please enter other E-Mail.");
                         email = cin.next();
                     }
                     else {
@@ -168,9 +168,7 @@ public class SignUp {
                                 1. Create a flight
                                 2. Close""");
 
-
-                boolean stillCreate = true;
-                while (stillCreate) {
+                while (true) {
                     System.out.println("""
                                 1. Create a flight
                                 2. Close""");
@@ -181,12 +179,11 @@ public class SignUp {
                         admin.handleEvent();
                     }
                     else {
-                        stillCreate = false;
+                        break;
                     }
                 }
-
             } else {
-                System.out.println("User registration failed.");
+                System.err.println("User registration failed.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
